@@ -2,7 +2,7 @@ require("@babel/polyfill");
 import Search from "./model/Search";
 import { elements, renderLoader, clearLoader } from "./view/base";
 import * as searchView from "./view/searchView";
-
+import Recipe from "./model/Recipe";
 /**
  * Web app төлөв
  * - Хайлтын query, үр дүн
@@ -13,6 +13,9 @@ import * as searchView from "./view/searchView";
 
 const state = {};
 
+/**
+ * Хайлтын контроллер = Model ==> Controller <== View
+ */
 const controlSearch = async () => {
   // 1) Вэбээс хайлтын түлхүүр үгийг гаргаж авна.
   const query = searchView.getInput();
@@ -40,3 +43,15 @@ elements.searchForm.addEventListener("submit", e => {
   e.preventDefault();
   controlSearch();
 });
+
+elements.pageButtons.addEventListener("click", e => {
+  const btn = e.target.closest(".btn-inline");
+
+  if (btn) {
+    const gotoPageNumber = parseInt(btn.dataset.goto, 10);
+    searchView.clearSearchResult();
+    searchView.renderRecipes(state.search.result, gotoPageNumber);
+  }
+});
+const r = new Recipe(47746);
+r.getRecipe();
